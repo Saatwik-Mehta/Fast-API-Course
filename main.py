@@ -1,14 +1,46 @@
-from typing import Optional
-from typing import Dict
-from fastapi import FastAPI 
+from typing import Dict, Optional
+from fastapi import FastAPI, Header
+from pydantic import BaseModel
 
 app = FastAPI()
 
-@app.get('/')
+
+@app.get("/")
 async def read_root():
-    return {"message" : "Hello World"}
+    return {"message": "Hello World"}
 
 
-@app.get('/greet')
-async def greet(name: Optional[str] = "Barrack Obama", age:Optional[int] = 25) -> Dict:
-    return {"message" : f"Hello {name} and you are {age} years old"}
+@app.get("/greet")
+async def greet(name: Optional[str] = "Barrack Obama", age: Optional[int] = 25) -> Dict:
+    return {"message": f"Hello {name} and you are {age} years old"}
+
+
+class BookCreateModal(BaseModel):
+    title: str
+    author: str
+    rating: Optional[float]
+
+
+@app.post("/create_book")
+async def create_book(book_data: BookCreateModal) -> Dict:
+    return {
+        "message": "Book created successfully",
+        "data": {
+            "title": book_data.title,
+            "author": book_data.author,
+            "rating": book_data.rating,
+        },
+    }
+@app.get("/get_headers", status_code=200)
+async def get_headers(
+    accept: str = Header(None),
+    content_type: str = Header(None),
+    user_agent: str = Header(None),
+    host: str = Header(None),
+):
+    request_headers = {}
+    request_headers["Accept"] = accept
+    request_headers["Content-type"] = content_type
+    request_headers["User-agent"] = user_agent
+    request_headers["Host"] = host
+    return {"message": "Request headers received successfully", "data": request_headers}
