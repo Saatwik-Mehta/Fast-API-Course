@@ -1,38 +1,22 @@
-from typing import Dict, List, Optional
-from artifacts import books
-from fastapi import FastAPI, status
+from typing import List, Dict
+
+from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
-from pydantic import BaseModel
+from src.books.schemas import Book, BookUpdate
+from src.books.book_data import books
 
-app = FastAPI()
-
-
-class Book(BaseModel):
-    id: int
-    title: str
-    language: str
-    author: str
-    publisher: str
-    published_date: str
-    page_count: int
+books_routes = APIRouter()
 
 
-class BookUpdate(BaseModel):
-    title: Optional[str] = None
-    language: Optional[str] = None
-    author: Optional[str] = None
-    publisher: Optional[str] = None
-    page_count: Optional[int] = None
 
-
-@app.post("/book", status_code=status.HTTP_201_CREATED)
+@books_routes.post("/", status_code=status.HTTP_201_CREATED)
 def add_book(book_data: Book) -> Dict:
     new_book = book_data.model_dump()
     books.append(new_book)
     return new_book
 
 
-@app.put("/book/{book_id}", status_code=200)
+@books_routes.put("/{book_id}", status_code=200)
 def update_book(book_id: int, updated_data: BookUpdate) -> Dict:
     for book in books:
         if book["id"] == book_id:
@@ -41,7 +25,7 @@ def update_book(book_id: int, updated_data: BookUpdate) -> Dict:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
-@app.get("/book/{book_id}", status_code=200)
+@books_routes.get("/{book_id}", status_code=200)
 def get_a_book(book_id: int) -> Dict:
     for book in books:
         if book["id"] == book_id:
@@ -49,12 +33,12 @@ def get_a_book(book_id: int) -> Dict:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
-@app.get("/books", status_code=200, response_model=List[Book])
+@books_routes.get("/", status_code=200, response_model=List[Book])
 def all_books() -> Dict:
     return books
 
 
-@app.delete("/book/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
+@books_routes.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book(book_id: int):
     for book in books:
         if book["id"] == book_id:
