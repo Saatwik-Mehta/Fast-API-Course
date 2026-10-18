@@ -8,7 +8,6 @@ from src.books.book_data import books
 books_routes = APIRouter()
 
 
-
 @books_routes.post("/", status_code=status.HTTP_201_CREATED)
 def add_book(book_data: Book) -> Dict:
     new_book = book_data.model_dump()
