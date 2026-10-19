@@ -6,7 +6,7 @@ from uuid import UUID, uuid4
 
 
 class Book(SQLModel, table=True):
-    id: UUID = Field(
+    id: UUID = Field( 
         sa_column=Column(pg.UUID, nullable=False, primary_key=True, default=uuid4)
     )
     title: str
