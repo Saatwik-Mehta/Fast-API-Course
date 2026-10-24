@@ -20,7 +20,7 @@ app = FastAPI(
     description="API for managing books",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=life_span
+    lifespan=life_span,
 )
 
 app.include_router(books_routes, prefix=f"/api/{version}/books")

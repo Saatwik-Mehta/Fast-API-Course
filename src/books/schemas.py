@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID, uuid4
-from datetime import datetime
+from datetime import datetime, date
+
 
 class Book(BaseModel):
     id: UUID
@@ -9,12 +10,10 @@ class Book(BaseModel):
     language: str
     author: str
     publisher: str
-    published_date: str
+    published_date: date
     page_count: int
     created_at: datetime
-    updated_at: datetime
-    created_by: str
-    updated_by: str
+    created_by: UUID
 
 
 class BookCreate(BaseModel):
@@ -24,17 +23,13 @@ class BookCreate(BaseModel):
     publisher: str
     page_count: int
     published_date: str
-    created_at: datetime
     created_by: str
 
 
 class BookUpdate(BaseModel):
-    title: Optional[str] = None
-    language: Optional[str] = None
-    author: Optional[str] = None
-    publisher: Optional[str] = None
-    published_date: Optional[str] = None
-    page_count: Optional[int] = None
-    updated_at: Optional[datetime] = None
-    updated_by: Optional[str] = None
-    
+    title: str
+    language: str
+    author: str
+    publisher: str
+    page_count: int
+    updated_by: str
