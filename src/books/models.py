@@ -18,11 +18,15 @@ class Book(SQLModel, table=True):
     created_at: Optional[datetime] = Field(
         sa_column=Column(pg.TIMESTAMP, default=datetime.now)
     )
-    updated_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = Field(
+        sa_column=Column(pg.TIMESTAMP, nullable=True)
+    )
     created_by: Optional[str] = Field(
         sa_column=Column(pg.UUID, nullable=False, default=None)
     )
-    updated_by: Optional[str] = None
+    updated_by: Optional[str] = Field(
+        sa_column=Column(pg.UUID, nullable=True, default=None)
+    )
 
     def __repr__(self):
         return f"<Book {self.title}>"

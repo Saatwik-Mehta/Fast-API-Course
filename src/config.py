@@ -11,4 +11,3 @@ class Settings(BaseSettings):
 
 
 Config = Settings()
-print("ENGINE IS USING URL:", repr(Config.DATABASE_URL))
